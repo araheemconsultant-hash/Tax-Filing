@@ -501,34 +501,8 @@ async function submitLead(e) {
   err.style.display = "none";
 
   const d = Object.fromEntries(new FormData(form));
-  const d = {
-  fullName: document.getElementById("fullName").value,
-  whatsapp: document.getElementById("whatsapp").value,
-  email: document.getElementById("email").value,
-  filingType: document.getElementById("filingType").value,
-  message: document.getElementById("message").value
-};
-
-async function submitForm() {
-
+  
   try {
-
-    // 1. SEND TO GOOGLE SHEET (ADD THIS HERE)
-    await fetch(SHEET_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        fullName: d.fullName,
-        phone: d.whatsapp,
-        email: d.email,
-        filingType: d.filingType,
-        message: d.message
-      })
-    });
-
-
-
-
-//  try {
     await emailjs.send(EJS_SERVICE, EJS_TEMPLATE, {
       to_email:    TO_EMAIL,
       full_name:   d.fullName,
@@ -549,7 +523,6 @@ async function submitForm() {
     btn.innerHTML = `Submit Details <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
   }
 }
-  
 </script>
 </body>
 </html>
