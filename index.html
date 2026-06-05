@@ -502,17 +502,22 @@ async function submitLead(e) {
 
   const d = Object.fromEntries(new FormData(form));
 
-  try {
-fetch(SHEET_URL, {
-  method: "POST",
-  body: JSON.stringify({
-    fullName: d.fullName,
-    phone:    d.whatsapp,
-    email:    d.email,
-    ntn:      "—",
-    salary:   "—",
-  })
-});
+try {
+  await fetch(SHEET_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      fullName: d.fullName,
+      phone:    d.whatsapp,
+      email:    d.email,
+      ntn:      "—",
+      salary:   "—",
+    })
+  });
+} catch(sheetErr) {
+  console.log("Sheet error:", sheetErr);
+}
     await emailjs.send(EJS_SERVICE, EJS_TEMPLATE, {
       to_email:    TO_EMAIL,
       full_name:   d.fullName,
