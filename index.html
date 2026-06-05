@@ -518,7 +518,8 @@ try {
 } catch(sheetErr) {
   console.log("Sheet error:", sheetErr);
 }
-    await emailjs.send(EJS_SERVICE, EJS_TEMPLATE, {
+try {
+  await emailjs.send(EJS_SERVICE, EJS_TEMPLATE, {
       to_email:    TO_EMAIL,
       full_name:   d.fullName,
       whatsapp:    d.whatsapp,
