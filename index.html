@@ -500,20 +500,19 @@ async function submitLead(e) {
   btn.innerHTML = `<svg style="animation:spin 1s linear infinite" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" opacity=".25"/><path d="M12 2a10 10 0 0110 10"/></svg> Submitting...`;
   err.style.display = "none";
 
-  const d = Object.fromEntries(new FormData(form));
-  const d = {
-  fullName: document.getElementById("fullName").value,
-  whatsapp: document.getElementById("whatsapp").value,
-  email: document.getElementById("email").value,
-  filingType: document.getElementById("filingType").value,
-  message: document.getElementById("message").value
-};
+ async function submitForm() {
 
-async function submitForm() {
+  const d = {
+    fullName: document.getElementById("fullName").value,
+    whatsapp: document.getElementById("whatsapp").value,
+    email: document.getElementById("email").value,
+    filingType: document.getElementById("filingType").value,
+    message: document.getElementById("message").value
+  };
 
   try {
 
-    // 1. SEND TO GOOGLE SHEET (ADD THIS HERE)
+    // 1. GOOGLE SHEET
     await fetch(SHEET_URL, {
       method: "POST",
       body: JSON.stringify({
@@ -525,28 +524,43 @@ async function submitForm() {
       })
     });
 
-
-
-
-//  try {
+    // 2. EMAILJS
     await emailjs.send(EJS_SERVICE, EJS_TEMPLATE, {
-      to_email:    TO_EMAIL,
-      full_name:   d.fullName,
-      whatsapp:    d.whatsapp,
-      email:       d.email,
+      to_email: TO_EMAIL,
+      full_name: d.fullName,
+      whatsapp: d.whatsapp,
+      email: d.email,
       filing_type: d.filingType,
-      message:     d.message || "—",
-      submitted_at: new Date().toLocaleString("en-PK", { timeZone: "Asia/Karachi" }),
+      message: d.message || "—",
+      submitted_at: new Date().toLocaleString("en-PK", {
+        timeZone: "Asia/Karachi"
+      }),
     });
+
+    // 3. SUCCESS UI
     document.getElementById("form-wrap").style.display = "none";
     document.getElementById("fsuc").style.display = "block";
-    document.querySelector(".btn-swa").href = `https://wa.me/${WA}?text=Hi! I just submitted my tax filing details.`;
+
+    document.querySelector(".btn-swa").href =
+      `https://wa.me/${WA}?text=Hi! I just submitted my tax filing details.`;
+
     document.querySelector(".btn-swa").target = "_blank";
-  } catch(ex) {
-    err.textContent = "Could not send. Please WhatsApp us directly.";
-    err.style.display = "block";
-    btn.disabled = false;
-    btn.innerHTML = `Submit Details <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+
+  } catch (ex) {
+    console.log(ex);
+
+    const err = document.getElementById("err");
+    const btn = document.querySelector("button[type='submit']");
+
+    if (err) {
+      err.textContent = "Could not send. Please WhatsApp us directly.";
+      err.style.display = "block";
+    }
+
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = "Submit Details";
+    }
   }
 }
 </script>
