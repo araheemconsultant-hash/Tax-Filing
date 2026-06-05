@@ -457,7 +457,6 @@ const TO_EMAIL = "araheem.consultant@gmail.com";
 const EJS_KEY      = "A5na70n5OkTpb9-dy";
 const EJS_SERVICE  = "service_vkg6bql";
 const EJS_TEMPLATE = "template_o3vee5h";
-const SHEET_URL = "https://script.google.com/macros/s/AKfycbwchUGuoX55NSlOCnqF4wS0avurw95NffDibVmOruZHCIr_S62tJHwCbtScSlhyjZcDBg/exec"
 // ════════════════════════════════════════════════════
 
 // Set all WhatsApp links
@@ -501,6 +500,7 @@ async function submitLead(e) {
   err.style.display = "none";
 
   const d = Object.fromEntries(new FormData(form));
+
   try {
     await emailjs.send(EJS_SERVICE, EJS_TEMPLATE, {
       to_email:    TO_EMAIL,
@@ -522,10 +522,6 @@ async function submitLead(e) {
     btn.innerHTML = `Submit Details <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
   }
 }
-
-
-
-
 </script>
 </body>
 </html>
