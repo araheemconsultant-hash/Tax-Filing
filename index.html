@@ -505,9 +505,11 @@ async function submitLead(e) {
 
   try {
 
-    // Google Sheet (ADD THIS ONLY IF YOU ARE USING SHEET_URL)
-    await fetch(SHEET_URL, {
+    // Google Sheet
+    fetch(SHEET_URL, {
       method: "POST",
+      mode: "no-cors",
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         fullName: d.fullName,
         phone: d.whatsapp,
@@ -515,9 +517,9 @@ async function submitLead(e) {
         filingType: d.filingType,
         message: d.message || "—"
       })
-    });
+    }).catch(e => console.warn("Sheet/Drive write error (non-fatal):", e));
 
-    // EmailJS
+    // EmailJS — runs independently of sheet
     await emailjs.send(EJS_SERVICE, EJS_TEMPLATE, {
       to_email: TO_EMAIL,
       full_name: d.fullName,
