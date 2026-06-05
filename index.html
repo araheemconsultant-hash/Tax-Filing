@@ -501,7 +501,7 @@ async function submitLead(e) {
   err.style.display = "none";
 
   const d = Object.fromEntries(new FormData(form));
-  
+
   try {
     await emailjs.send(EJS_SERVICE, EJS_TEMPLATE, {
       to_email:    TO_EMAIL,
